@@ -81,11 +81,10 @@ function Aside({ selectedBrand, setSelectedBrand, selectedColor, setSelectedColo
                 width: "20px",
                 height: "20px",
                 borderRadius: "50%",
-                border: "1px solid",
                 backgroundColor: color,
                 cursor: 'pointer',
-                outlineOffset: "2px",
-                outline: selectedColor === color ? "1px solid red" : "",
+                outlineOffset: "3px",
+                outline: selectedColor === color ? "2px solid white" : "",
               }}
             />
           </li>
