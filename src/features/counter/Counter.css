@@ -1,0 +1,12 @@
+.settings-modal {
+    width: 90%;
+    max-width: 400px;
+    border: 2px solid #e2e8f0;
+  }
+  
+  @media (min-width: 640px) {
+    .settings-modal {
+      top: 20px;
+    }
+  }
+  
