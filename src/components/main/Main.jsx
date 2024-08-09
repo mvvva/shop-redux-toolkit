@@ -1,36 +1,36 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Context } from '../../context/Context';
-import { ACTION_TYPES } from '../../store/reducer';
+import React, { useEffect } from 'react';
 import "./Main.css";
+import { useDispatch, useSelector } from 'react-redux';
+import { setLoading, saveProducts, setError } from '../../features/product/productSlice';
 
 function Main({ selectedBrand, selectedColor, sortBy }) {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const { state: {products}, dispatch } = useContext(Context);
+  const dispatch = useDispatch();
+  const { products, loading, error} = useSelector((store) => store.products)
+
 
   useEffect(() => {
     async function fetchProducts() {
-      setLoading(true);
+      dispatch(setLoading(true));
       const brandFilter = selectedBrand ? `brand_name=${selectedBrand}` : "";
       const query = brandFilter ? `?${brandFilter}` : "";
       const api = `https://headphones-server.onrender.com/products${query}`;
 
       try {
         const response = await fetch(api);
-        const data = await response.json();
+        const products = await response.json();
 
         const filteredData = selectedColor
-          ? data.filter(product =>
+          ? products.filter(product =>
               product.color_options.includes(selectedColor)
             )
-          : data;
+          : products;
           
 
-        dispatch({ type: ACTION_TYPES.fetch_products, payload: filteredData });
+        dispatch(saveProducts(products));
       } catch (error) {
-        setError(error.message);
+        dispatch(setError(error.message));
       } finally {
-        setLoading(false);
+        dispatch(setLoading(false));
       }
     }
     fetchProducts();
@@ -56,7 +56,7 @@ function Main({ selectedBrand, selectedColor, sortBy }) {
             <img
               src={p.image_url}
               alt={p.name}
-              className="h-72 w-full object-cover rounded-md" // Ensure all images have the same height
+              className="h-72 w-full object-cover rounded-md" 
             />
             <h3 className="text-xl font-semibold mt-2">{p.name}</h3>
             <p className="text-gray-400">{p.brand_name}</p>
